@@ -1,31 +1,52 @@
 package org.rspeer.game.script;
 
+import org.rspeer.event.EventDispatcher;
+import org.rspeer.game.script.loader.ScriptProvider;
 import org.rspeer.game.script.loader.ScriptSource;
 
 public class ScriptController {
 
-    private Script current;
+    private final EventDispatcher internalDispatcher;
+
+    private Script active;
+    private ScriptSource source;
     private Thread scriptThread;
 
-    public void start(Script script, ScriptSource src) {
-        if (current != null) {
+    public ScriptController(EventDispatcher internalDispatcher) {
+        this.internalDispatcher = internalDispatcher;
+    }
+
+    public void start(ScriptProvider provider, ScriptSource source) {
+        if (active != null) {
             throw new IllegalStateException("A script is already running");
         }
 
-        current = script;
-        current.setState(Script.State.STARTING);
-        current.setState(Script.State.RUNNING);
+        this.source = source;
+        active = provider.define(source);
+        active.setInternalDispatcher(internalDispatcher);
+        active.setSource(source);
+        active.setState(Script.State.STARTING);
+        active.setState(Script.State.RUNNING);
 
-        scriptThread = new Thread(current);
+        scriptThread = new Thread(active);
         scriptThread.start();
     }
 
     public void stop() {
-        if (current != null) {
-            current.setState(Script.State.STOPPED);
-            current = null;
+        if (active != null) {
+            active.setState(Script.State.STOPPED);
+            active = null;
         }
 
+        source = null;
         scriptThread = null;
+    }
+
+    public ScriptSource getSource() {
+        return source;
+    }
+
+    public Script getActive() {
+        return active;
     }
 }

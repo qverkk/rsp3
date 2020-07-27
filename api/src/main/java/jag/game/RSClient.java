@@ -1,6 +1,6 @@
 package jag.game;
 
-import org.rspeer.game.event.EventDispatcher;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.provider.callback.EventMediator;
 import jag.RSIntegerNode;
 import jag.RSLinkedList;
@@ -24,10 +24,38 @@ import jag.opcode.*;
 import jag.script.RSScriptEvent;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 public interface RSClient extends RSGameEngine {
 
+    default void writePacket(RSOutgoingPacketMeta meta, Consumer<RSBuffer> consumer) {
+        RSConnectionContext ctx = getConnectionContext();
+        if (ctx != null) {
+            RSOutgoingPacket packet = prepareOutgoingPacket(meta, ctx.getEncryptor());
+            consumer.accept(packet.getBuffer());
+            ctx.writeLater(packet);
+        }
+    }
+
+    default void processNumericInput(int value) {
+        writePacket(getProcessNumericInput(), buffer -> buffer.p1(value));
+    }
+
+    default void processAlphabeticalInput(String value) {
+        writePacket(getProcessAlphabeticalInput(), buffer -> buffer.p1(value.length() + 1).pjstr(value));
+    }
+
+    RSOutgoingPacket prepareOutgoingPacket(RSOutgoingPacketMeta meta, RSIsaacCipher cipher);
+
+    RSOutgoingPacketMeta getProcessNumericInput();
+
+    RSOutgoingPacketMeta getProcessAlphabeticalInput();
+
     void processDialogActionPacket(int componentUid, int subComponentIndex);
+
+    boolean isSceneRenderingDisabled();
+
+    void setSceneRenderingDisabled(boolean enabled);
 
     RSScriptEvent newScriptEvent();
 
@@ -237,7 +265,7 @@ public interface RSClient extends RSGameEngine {
         return sb.toString();
     }
 
-    boolean isInInstancedScene();
+    boolean isSceneDynamic();
 
     int[] getLevels();
 

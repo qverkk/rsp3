@@ -23,6 +23,7 @@ public class ItemDefinition extends Definition<RSItemDefinition> {
         if (provider == null) {
             return -1;
         }
+
         return provider.getNoteTemplateId() != -1 ? provider.getId() : provider.getNoteId();
     }
 
@@ -31,6 +32,7 @@ public class ItemDefinition extends Definition<RSItemDefinition> {
         if (provider == null) {
             return -1;
         }
+
         return provider.getNoteTemplateId() != -1 ? provider.getNoteId() : provider.getId();
     }
 

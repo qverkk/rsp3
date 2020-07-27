@@ -40,6 +40,7 @@ public class EffectObject extends Entity<RSEffectObject> implements Identifiable
         if (provider == null) {
             return new Position(-1, -1);
         }
+
         return Position.fromAbsolute(provider.getAbsoluteX(), provider.getAbsoluteY(), provider.getFloorLevel());
     }
 }

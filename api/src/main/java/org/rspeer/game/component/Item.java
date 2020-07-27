@@ -48,6 +48,7 @@ public class Item implements Identifiable, Nameable, Interactable {
         if (isNullId(id)) {
             return null;
         }
+
         return new Item(component.getSubComponentIndex(), id, stack, component.toAddress());
     }
 
@@ -67,6 +68,7 @@ public class Item implements Identifiable, Nameable, Interactable {
         if (isNullId(id)) {
             return null;
         }
+
         return new Item(index, id, stacks[index], component.toAddress());
     }
 
@@ -190,6 +192,7 @@ public class Item implements Identifiable, Nameable, Interactable {
         if (definition != null) {
             return definition.getRawActions();
         }
+
         return new String[0];
     }
 

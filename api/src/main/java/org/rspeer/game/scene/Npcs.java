@@ -11,17 +11,6 @@ import java.util.List;
 
 public class Npcs {
 
-    public static Npc getAt(int index) {
-        RSNpc[] npcs = Game.getClient().getNpcs();
-        if (npcs != null && index < npcs.length && index >= 0) {
-            RSNpc npc = npcs[index];
-            if (npc != null) {
-                return new Npc(npc, index);
-            }
-        }
-        return null;
-    }
-
     public static NpcQuery query() {
         return new NpcQuery(Npcs::getLoaded);
     }

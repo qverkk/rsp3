@@ -2,6 +2,7 @@ package org.rspeer.ui.locale;
 
 import org.rspeer.commons.Pair;
 import org.rspeer.environment.preferences.BotPreferences;
+import org.rspeer.environment.preferences.type.LocalePreference;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public enum Message {
 
-    SCRIPT_SELECTOR("Script Selector"),
+    SCRIPT("Script"),
     INTERFACE_EXPLORER("Interface Explorer"),
     RELOAD("Reload"),
     STOP("Stop"),
@@ -28,7 +29,9 @@ public enum Message {
     HELP("Help"),
     WINDOW("Window"),
     ALWAYS_ON_TOP("Always on top"),
-    DEBUG("Debug");
+    DEBUG("Debug"),
+    SELECTOR("Selector"),
+    SCRIPT_SELECTOR("Script Selector");
 
     //certain locales dont exist in the jdk
     public static final Locale LOCALE_DUTCH = new Locale("nl", "NL");
@@ -46,7 +49,7 @@ public enum Message {
     }
 
     public String getActive(BotPreferences prefs) {
-        return get(prefs.getLocale());
+        return get(prefs.valueOf(LocalePreference.class));
     }
 
     public String get(Locale locale) {

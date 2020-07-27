@@ -1,8 +1,9 @@
 package org.rspeer.game.query.scene;
 
+import jag.game.scene.entity.RSPlayer;
+import org.rspeer.game.Game;
 import org.rspeer.game.adapter.scene.Player;
 import org.rspeer.game.query.results.SceneNodeQueryResults;
-import jag.game.scene.entity.RSPlayer;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,4 +32,9 @@ public class PlayerQuery extends PathingEntityQuery<RSPlayer, Player, PlayerQuer
         return this;
     }
 
+    @Override
+    public PlayerQuery indexes(int... indexes) {
+        indexProvider(Game.getClient().getPlayers(), Player::new);
+        return super.indexes(indexes);
+    }
 }

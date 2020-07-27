@@ -11,17 +11,6 @@ import java.util.List;
 
 public class Players {
 
-    public static Player getAt(int index) {
-        RSPlayer[] players = Game.getClient().getPlayers();
-        if (players != null && index < players.length && index >= 0) {
-            RSPlayer player = players[index];
-            if (player != null) {
-                return new Player(player, index);
-            }
-        }
-        return null;
-    }
-
     public static Player getLocal() {
         RSPlayer local = Game.getClient().getPlayer();
         if (local != null) {

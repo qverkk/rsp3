@@ -1,11 +1,11 @@
 package org.rspeer.game.event;
 
-import org.rspeer.game.event.listener.EventListener;
+import java.awt.Graphics;
+import org.rspeer.event.Event;
+import org.rspeer.event.listener.EventListener;
 import org.rspeer.game.event.listener.RenderListener;
 
-import java.awt.*;
-
-public class RenderEvent extends Event<Graphics> {
+public class RenderEvent extends Event<Graphics, RenderListener> {
 
     /**
      * Constructs a prototypical Event.
@@ -14,13 +14,11 @@ public class RenderEvent extends Event<Graphics> {
      * @throws IllegalArgumentException if source is null.
      */
     public RenderEvent(Graphics source) {
-        super(source);
+        super(source, RenderListener.class);
     }
 
     @Override
     public void dispatch(EventListener listener) {
-        if (listener instanceof RenderListener) {
-            ((RenderListener) listener).notify(this);
-        }
+        ((RenderListener) listener).notify(this);
     }
 }

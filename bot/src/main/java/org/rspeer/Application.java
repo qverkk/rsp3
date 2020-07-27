@@ -1,14 +1,14 @@
 package org.rspeer;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.FlatLightLaf;
+import org.rspeer.commons.Configuration;
 import org.rspeer.environment.Environment;
-import org.rspeer.game.Game;
-import org.rspeer.game.loader.GameLoader;
+import org.rspeer.environment.preferences.BotPreferencesLoader;
+import org.rspeer.environment.preferences.JsonBotPreferencesLoader;
 import org.rspeer.ui.BotFrame;
+import org.rspeer.ui.Window;
+import org.rspeer.ui.worker.LoadGameWorker;
 
 import javax.swing.*;
-import java.io.IOException;
 
 /**
  * Entry point for the application
@@ -30,25 +30,21 @@ public class Application {
         }
     }
 
-    public void start() throws IOException {
-        GameLoader.load(true, Game::setClient);
+    public void start() {
+        System.out.printf("Loading %s preferences%n", Configuration.getApplicationTitle());
+
+        BotPreferencesLoader preferencesLoader = new JsonBotPreferencesLoader();
+        preferencesLoader.load(preferences -> {
+            environment.setPreferences(preferences);
+            System.out.printf("Successfully loaded %s preferences%n", Configuration.getApplicationTitle());
+        });
 
         SwingUtilities.invokeLater(() -> {
-            try {
-                FlatLaf laf = new FlatLightLaf();
-                FlatLaf.install(laf);
-                UIManager.setLookAndFeel(laf);
-                System.setProperty("sun.awt.noerasebackground", "true");
-                JFrame.setDefaultLookAndFeelDecorated(true);
-                JDialog.setDefaultLookAndFeelDecorated(true);
+            Window<JFrame> ui = new BotFrame(environment);
+            ui.display();
 
-                BotFrame ui = new BotFrame(environment);
-                ui.pack();
-                ui.validate();
-                ui.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            LoadGameWorker loader = new LoadGameWorker(environment, ui);
+            loader.execute();
         });
     }
 }

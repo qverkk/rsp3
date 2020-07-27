@@ -1,11 +1,20 @@
 package org.rspeer.commons;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 /**
  * Provides utilities for arrays
  */
 public class ArrayUtils {
+
+    public static <T> List<T> asModifiableList(T... values) {
+        List<T> elems = new ArrayList<>();
+        Collections.addAll(elems);
+        return elems;
+    }
 
     public static <T> boolean contains(T[] array, T value) {
         for (T elem : array) {

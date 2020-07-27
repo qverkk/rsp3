@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TaskScript extends Script {
+public abstract class TaskScript extends Script {
 
     private final List<Task> tasks = new CopyOnWriteArrayList<>();
+
+    @Override
+    public abstract void onStart();
 
     public final void submit(Task... tasks) {
         Collections.addAll(this.tasks, tasks);

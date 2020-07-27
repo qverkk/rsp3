@@ -61,6 +61,7 @@ public class Interfaces {
         if (address == null || address.getComponent() == -1) {
             return null; //Root reference
         }
+
         return getDirect(address.getRoot(), address.getComponent(), address.getSubComponent());
     }
 }

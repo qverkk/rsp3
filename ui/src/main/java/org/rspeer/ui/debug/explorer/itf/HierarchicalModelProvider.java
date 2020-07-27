@@ -8,7 +8,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import java.util.function.Supplier;
 
-public class HierarchicalModelProvider implements Supplier<TreeModel> {
+class HierarchicalModelProvider implements Supplier<TreeModel> {
 
     @Override
     public TreeModel get() {

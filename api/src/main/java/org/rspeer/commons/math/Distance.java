@@ -1,6 +1,7 @@
 package org.rspeer.commons.math;
 
 import org.rspeer.game.adapter.type.SceneNode;
+import org.rspeer.game.movement.pathfinding.Pathing;
 import org.rspeer.game.position.Position;
 
 /**
@@ -33,6 +34,15 @@ public enum Distance implements DistanceEvaluator {
         @Override
         public double evaluate(int x1, int y1, int x2, int y2) {
             return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+        }
+    },
+
+    PATHING {
+        @Override
+        public double evaluate(int x1, int y1, int x2, int y2) {
+            Position src = new Position(x1, y1);
+            Position dst = new Position(x2, y2);
+            return Pathing.getDistance(src, dst);
         }
     };
 

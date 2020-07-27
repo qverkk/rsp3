@@ -16,4 +16,8 @@ public abstract class Adapter<T extends RSProvider> {
     public T getProvider() {
         return provider.get();
     }
+
+    public boolean validate() {
+        return provider.get() != null;
+    }
 }

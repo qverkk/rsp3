@@ -64,6 +64,7 @@ public class InterfaceOptions {
         if (condition.getAsBoolean()) {
             return true;
         }
+
         InterfaceComponent button = Interfaces.lookup(buttonAddress);
         if (button == null) {
             InterfaceComponent options = Interfaces.lookup(ADVANCED_OPTIONS_ADDRESS);
@@ -140,6 +141,7 @@ public class InterfaceOptions {
         if (Game.getClientPreferences().getResizable() != 1) {
             return ViewMode.RESIZABLE_MODE;
         }
+
         return ViewMode.FIXED_MODE;
     }
 

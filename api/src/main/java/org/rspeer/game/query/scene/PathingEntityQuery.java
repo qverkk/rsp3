@@ -1,7 +1,10 @@
 package org.rspeer.game.query.scene;
 
+import jag.game.scene.entity.RSNpc;
+import jag.game.scene.entity.RSPathingEntity;
 import org.rspeer.commons.ArrayUtils;
 import org.rspeer.commons.Range;
+import org.rspeer.game.Game;
 import org.rspeer.game.adapter.scene.Npc;
 import org.rspeer.game.adapter.scene.PathingEntity;
 import org.rspeer.game.adapter.scene.Player;
@@ -10,7 +13,12 @@ import org.rspeer.game.adapter.type.Mobile;
 import org.rspeer.game.adapter.type.Nameable;
 import org.rspeer.game.scene.Npcs;
 import org.rspeer.game.scene.Players;
-import jag.game.scene.entity.RSPathingEntity;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class PathingEntityQuery<
         P extends RSPathingEntity,
@@ -30,6 +38,7 @@ public abstract class PathingEntityQuery<
 
     private int[] animations = null;
     private int[] stances = null;
+    private int[] indexes = null;
 
     private PathingEntity[] targeters = null;
     private PathingEntity[] targets = null;
@@ -119,6 +128,30 @@ public abstract class PathingEntityQuery<
         return self();
     }
 
+    public Q indexes(int... indexes) {
+        this.indexes = indexes;
+        return self();
+    }
+
+    protected <X extends RSPathingEntity> Supplier<List<T>> indexProvider(X[] raw, BiFunction<X, Integer, T> mapper) {
+        return () -> {
+            List<T> results = new ArrayList<>();
+            if (raw == null) {
+                return results;
+            }
+
+            for (int index : indexes) {
+                if (index < raw.length && index >= 0) {
+                    X provider = raw[index];
+                    if (provider != null) {
+                        results.add(mapper.apply(provider, index));
+                    }
+                }
+            }
+            return results;
+        };
+    }
+
     @Override
     public Q moving() {
         moving = true;
@@ -135,6 +168,10 @@ public abstract class PathingEntityQuery<
 
     @Override
     public boolean test(T e) {
+        if (indexes != null && !ArrayUtils.contains(indexes, e.getIndex())) {
+            return false;
+        }
+
         if (names != null && !ArrayUtils.containsExactInsensitive(names, e.getName())) {
             return false;
         }

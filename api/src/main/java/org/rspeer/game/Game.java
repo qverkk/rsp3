@@ -1,7 +1,7 @@
 package org.rspeer.game;
 
 import org.rspeer.game.action.Action;
-import org.rspeer.game.event.EventDispatcher;
+import org.rspeer.event.EventDispatcher;
 import org.rspeer.game.provider.callback.EventMediator;
 import jag.game.RSClient;
 import jag.game.option.RSClientPreferences;

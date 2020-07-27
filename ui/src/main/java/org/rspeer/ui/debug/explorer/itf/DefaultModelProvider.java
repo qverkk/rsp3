@@ -9,7 +9,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import java.util.function.Supplier;
 
-public class DefaultModelProvider implements Supplier<TreeModel> {
+class DefaultModelProvider implements Supplier<TreeModel> {
 
     @Override
     public TreeModel get() {

@@ -8,37 +8,60 @@ import org.rspeer.game.event.RenderEvent;
 import org.rspeer.game.event.listener.RenderListener;
 import org.rspeer.ui.locale.Message;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeModel;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.function.Supplier;
 
+//TODO: Add separate viewport & info refresh buttons
 public class InterfaceExplorer extends JFrame implements RenderListener {
 
+    private static final int VIEWPORT_WIDTH = 220;
+    private static final int INFO_WIDTH = 360;
+
     private final JTree tree;
+
     private Object render = null;
     private Supplier<TreeModel> provider = new DefaultModelProvider();
 
     public InterfaceExplorer(Environment environment) {
         super(Message.INTERFACE_EXPLORER.getActive(environment.getPreferences()));
-        this.tree = new JTree();
+
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("/icon.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         setLayout(new BorderLayout());
 
-        JCheckBoxMenuItem hierarchical = new JCheckBoxMenuItem("Hierarchical View", false);
+        this.tree = new JTree();
+        tree.setRootVisible(false);
+        tree.setShowsRootHandles(true);
+
+        JMenuItem hierarchical = new JCheckBoxMenuItem("Hierarchical View", false);
         add(hierarchical, BorderLayout.NORTH);
         hierarchical.addActionListener(x -> {
             provider = hierarchical.isSelected() ? new HierarchicalModelProvider() : new DefaultModelProvider();
             tree.setModel(provider.get());
         });
 
-        JScrollPane viewport = new JScrollPane(tree, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        JPanel info = buildInfoPanel(tree);
+        JScrollPane viewport = new JScrollPane(tree);
+        viewport.setMinimumSize(new Dimension(VIEWPORT_WIDTH, -1));
+        viewport.setPreferredSize(viewport.getMinimumSize());
+
+        JScrollPane info = new JScrollPane(buildInfoPanel(tree));
+        info.setMinimumSize(new Dimension(INFO_WIDTH, -1));
+        info.setPreferredSize(info.getMinimumSize());
         add(viewport, BorderLayout.WEST);
-        add(info, BorderLayout.EAST);
+        add(info, BorderLayout.CENTER);
 
         tree.setModel(provider.get());
 
@@ -55,15 +78,19 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
         });
 
         pack();
+        setMinimumSize(new Dimension(getWidth(), environment.getBotContext().getFrame().getHeight()));
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(environment.getBotContext().getFrame());
         setVisible(true);
     }
 
-    private JPanel buildInfoPanel(JTree tree) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    private InfoPanel buildInfoPanel(JTree tree) {
+        InfoPanel panel = new InfoPanel();
+
+        // Inset value 4 is the JTree's default
+        // A forced bottom-inset of value 10 is set by the InfoPanel
+        panel.setBorder(new EmptyBorder(new Insets(4, 4, 0, 4)));
+
         tree.getSelectionModel().addTreeSelectionListener(new SelectionListener(panel));
         return panel;
     }
@@ -106,30 +133,28 @@ public class InterfaceExplorer extends JFrame implements RenderListener {
 
             if (selected instanceof InterfaceNode) {
                 InterfaceNode node = (InterfaceNode) selected;
-                panel.add(new JLabel("Address: " + node.group));
-                panel.add(new JLabel("Component Count: " + Interfaces.query().groups(node.group).results().size()));
+                panel.add(new InfoLabel("Address: " + node.group));
+                panel.add(new InfoLabel("Component Count: " + Interfaces.query().groups(node.group).results().size()));
             } else if (selected instanceof ComponentNode) {
                 ComponentNode node = (ComponentNode) selected;
-                panel.add(new JLabel("Address: " + node.component.toAddress().toShortString()));
-                panel.add(new JLabel("UID: " + node.component.getUid()));
-                panel.add(new JLabel("Bounds: " + node.component.getBounds()));
-                panel.add(new JLabel("Item: " + node.component.getItem()));
-                panel.add(new JLabel("Type: " + node.component.getType()));
-                panel.add(new JLabel("Material: " + node.component.getMaterialId()));
-                panel.add(new JLabel("Sprite: " + node.component.getSpriteId()));
-                panel.add(new JLabel("Foreground: " + node.component.getForeground()));
-                panel.add(new JLabel("Shadow: " + node.component.getShadowColor()));
-                panel.add(new JLabel("Model (type): " + node.component.getModelId() + " (" + node.component.getModelType() + ")"));
-                panel.add(new JLabel("Config: " + node.component.getConfig()));
-                panel.add(new JLabel("Text: " + node.component.getText()));
-                panel.add(new JLabel("Name: " + node.component.getName()));
-                panel.add(new JLabel("Actions: " + node.component.getActions()));
-                panel.add(new JLabel("Tooltip: " + node.component.getToolTip()));
+                panel.add(new InfoLabel("Address: " + node.component.toAddress().toShortString()));
+                panel.add(new InfoLabel("UID: " + node.component.getUid()));
+                panel.add(new InfoLabel("Bounds: " + node.component.getBounds()));
+                panel.add(new InfoLabel("Item: " + node.component.getItem()));
+                panel.add(new InfoLabel("Type: " + node.component.getType()));
+                panel.add(new InfoLabel("Material: " + node.component.getMaterialId()));
+                panel.add(new InfoLabel("Sprite: " + node.component.getSpriteId()));
+                panel.add(new InfoLabel("Foreground: " + node.component.getForeground()));
+                panel.add(new InfoLabel("Shadow: " + node.component.getShadowColor()));
+                panel.add(new InfoLabel("Model (type): " + node.component.getModelId() + " (" + node.component.getModelType() + ")"));
+                panel.add(new InfoLabel("Config: " + node.component.getConfig()));
+                panel.add(new InfoLabel("Text: " + node.component.getText()));
+                panel.add(new InfoLabel("Name: " + node.component.getName()));
+                panel.add(new InfoLabel("Actions: " + node.component.getActions()));
+                panel.add(new InfoLabel("Tooltip: " + node.component.getToolTip()));
             }
-
             panel.repaint();
             panel.revalidate();
-            pack();
         }
     }
 }

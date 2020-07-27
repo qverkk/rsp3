@@ -53,6 +53,7 @@ public class InterfaceAddress {
         if (supplier != null && !supplier.done()) {
             mapComponentInfo();
         }
+
         return root;
     }
 
@@ -60,6 +61,7 @@ public class InterfaceAddress {
         if (supplier != null && !supplier.done()) {
             mapComponentInfo();
         }
+
         return component;
     }
 
@@ -67,6 +69,7 @@ public class InterfaceAddress {
         if (supplier != null && !supplier.done()) {
             mapComponentInfo();
         }
+
         return subComponent;
     }
 
@@ -74,6 +77,7 @@ public class InterfaceAddress {
         if (!isMapped()) {
             mapComponentInfo();
         }
+
         return new InterfaceAddress(root, component, -1);
     }
 
@@ -81,6 +85,7 @@ public class InterfaceAddress {
         if (!isMapped()) {
             mapComponentInfo();
         }
+
         return new InterfaceAddress(root, component, subComponent);
     }
 
@@ -88,6 +93,7 @@ public class InterfaceAddress {
         if (!isMapped()) {
             mapComponentInfo();
         }
+
         return new InterfaceAddress(root, component, subComponent);
     }
 

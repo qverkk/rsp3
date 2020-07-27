@@ -13,8 +13,16 @@ import java.util.List;
 
 public abstract class Definition<P extends RSDefinition> extends Adapter<P> implements Identifiable, Nameable, Actionable {
 
+    private final P provider;
+
     protected Definition(P provider) {
         super(provider);
+        this.provider = provider;
+    }
+
+    @Override
+    public P getProvider() {
+        return provider;
     }
 
     @Override

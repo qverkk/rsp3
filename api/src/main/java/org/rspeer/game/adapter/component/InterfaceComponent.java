@@ -112,6 +112,7 @@ public class InterfaceComponent extends Adapter<RSInterfaceComponent> implements
         if (configs == null) {
             return provider.getConfig();
         }
+
         RSIntegerNode node = configs.lookup(((long) getUid() << 32) + (long) getSubComponentIndex());
         return node != null ? node.getValue() : provider.getConfig();
     }
@@ -281,6 +282,7 @@ public class InterfaceComponent extends Adapter<RSInterfaceComponent> implements
         if (comp != -1) { //is a grandchild
             return getUid() & 0xFFFF;
         }
+
         return getUid() >>> 16;
     }
 
@@ -328,6 +330,7 @@ public class InterfaceComponent extends Adapter<RSInterfaceComponent> implements
         if (provider == null) {
             return null;
         }
+
         RSInterfaceComponent[] subs = provider.getSubComponents();
         return subs != null && index >= 0 && index < subs.length ? new InterfaceComponent(subs[index]) : null;
     }

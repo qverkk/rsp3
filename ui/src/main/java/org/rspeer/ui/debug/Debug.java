@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class Debug implements RenderListener {
 
-    private int y = 15;
+    private int y = 45;
     private List<String> entries = new LinkedList<>();
 
     @Override
@@ -22,7 +22,7 @@ public abstract class Debug implements RenderListener {
             AWTUtil.drawBoldedString(g, entry, 20, y += 15);
         }
 
-        y = 15;
+        y = 45;
         entries = new LinkedList<>();
     }
 

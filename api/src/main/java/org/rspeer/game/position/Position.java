@@ -74,6 +74,7 @@ public class Position implements SceneNode {
             Position other = (Position) obj;
             return other.x == x && other.y == y && other.level == level;
         }
+
         return false;
     }
 

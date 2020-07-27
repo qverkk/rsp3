@@ -7,7 +7,7 @@ class NullSafeInventory extends Inventory {
 
     static final NullSafeInventory INSTANCE = new NullSafeInventory();
 
-    public NullSafeInventory() {
+    private NullSafeInventory() {
         super(Provider.INSTANCE, Format.INDIVIDUAL, null);
     }
 

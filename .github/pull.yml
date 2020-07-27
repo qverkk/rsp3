@@ -1,0 +1,8 @@
+version: "1"
+rules:
+  - base: master
+    upstream: rs-peer:master
+    mergeMethod: hardreset
+  - base: development
+    upstream: rs-peer:development
+    mergeMethod: hardreset

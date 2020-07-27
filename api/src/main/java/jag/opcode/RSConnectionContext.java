@@ -21,4 +21,5 @@ public interface RSConnectionContext extends RSProvider {
 
     RSLinkedList<RSOutgoingPacket> getPackets();
 
+    void writeLater(RSOutgoingPacket packet);
 }

@@ -20,6 +20,6 @@ public class Configuration {
         public static final Path GAMEPACK_LOCATION = HOME.resolve("gamepack.jar");
         public static final Path SCRIPTS_LOCATION = HOME.resolve("scripts");
         public static final Path DATA_LOCATION = HOME.resolve("data");
-
+        public static final Path PREFERENCES_LOCATION = HOME.resolve("preferences.json");
     }
 }

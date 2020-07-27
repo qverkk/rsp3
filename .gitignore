@@ -23,3 +23,5 @@ rspeer/log.xml
 
 # No accidental unobfucated jar leak
 *.jar
+
+*.class

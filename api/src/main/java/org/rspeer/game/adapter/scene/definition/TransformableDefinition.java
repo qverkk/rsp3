@@ -32,7 +32,7 @@ public abstract class TransformableDefinition<P extends RSTransformableDefinitio
     public T transform() {
         int[] transformIds = getTransformIds();
 
-        if (transformIds == null) {
+        if (transformIds == null || transformIds.length == 0) {
             return null;
         }
 

@@ -16,13 +16,14 @@ import java.util.function.Consumer;
  */
 public class GameLoader {
 
-    public static void load(boolean local, Consumer<RSClient> later) throws IOException {
+    public static RSClient load(boolean local, Consumer<RSClient> later) throws IOException {
         RSClient result = null;
         if (local) {
             result = fromLocalModscript();
         }
 
         later.accept(result);
+        return result;
     }
 
     private static RSClient fromLocalModscript() throws IOException {

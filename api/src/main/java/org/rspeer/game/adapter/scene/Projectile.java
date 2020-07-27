@@ -45,6 +45,7 @@ public class Projectile extends Entity<RSProjectile> implements Identifiable, Mo
         if (provider == null) {
             return new Position(-1, -1);
         }
+
         return Position.fromAbsolute((int) provider.getAbsoluteX(), (int) provider.getAbsoluteY(), Scene.getFloorLevel());
     }
 
@@ -72,9 +73,10 @@ public class Projectile extends Entity<RSProjectile> implements Identifiable, Mo
         if (index == 0) {
             return null;
         } else if (index > 0) {
-            return Npcs.getAt(index - 1);
+            return Npcs.query().indexes(index - 1).results().first();
         }
+
         index = -index - 1;
-        return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.getAt(index);
+        return index == Game.getClient().getPlayerIndex() ? Players.getLocal() : Players.query().indexes(index).results().first();
     }
 }

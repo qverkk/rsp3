@@ -11,6 +11,8 @@ import org.rspeer.game.position.Position;
 import org.rspeer.game.scene.Scene;
 import jag.game.RSClient;
 
+import java.util.*;
+
 public class Movement {
 
     private static final int RUN_VAR = 173;
@@ -18,12 +20,12 @@ public class Movement {
 
     public static void walkTowards(SceneNode destination) {
         Position dest = destination.getPosition().toScene();
-        int x = normalize(dest.getX());
-        int y = normalize(dest.getY());
+        int x = localize(dest.getX());
+        int y = localize(dest.getY());
         Game.queueAction(new WalkAction(ActionOpcode.WALK, x, y));
     }
 
-    private static int normalize(int value) {
+    private static int localize(int value) {
         if (value < 0) {
             return value;
         } else if (value > 103) {
@@ -48,7 +50,8 @@ public class Movement {
         if (Movement.isRunEnabled() == on) {
             return true;
         }
-        InterfaceComponent btn = Interfaces.getDirect(160, 22);
+
+        InterfaceComponent btn = Interfaces.getDirect(160, 22); //TODO address
         return btn != null && btn.interact(x -> true);
     }
 
@@ -56,6 +59,7 @@ public class Movement {
         if (!isDestinationSet()) {
             return null;
         }
+
         Position base = Scene.getBase();
         RSClient client = Game.getClient();
         return new Position(base.getX() + client.getDestinationX(), base.getY() + client.getDestinationY(), base.getFloorLevel());

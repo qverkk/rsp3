@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public abstract class Query<T, QB extends SelfTyped<QB>, QR extends QueryResults<T, QR>> implements Cloneable, SelfTyped<QB>, Predicate<T> {
+public abstract class Query<T, QB extends SelfTyped<QB>, QR extends QueryResults<T, QR>>
+        implements Cloneable, SelfTyped<QB>, Predicate<T> {
 
     private Supplier<List<T>> provider;
     private Predicate<T> customFilter;

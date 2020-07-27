@@ -1,11 +1,13 @@
 package org.rspeer.game.query.scene;
 
+import jag.game.scene.entity.RSNpc;
 import org.rspeer.commons.ArrayUtils;
+import org.rspeer.game.Game;
 import org.rspeer.game.adapter.scene.Npc;
+import org.rspeer.game.adapter.scene.Player;
 import org.rspeer.game.adapter.type.Actionable;
 import org.rspeer.game.adapter.type.Identifiable;
 import org.rspeer.game.query.results.SceneNodeQueryResults;
-import jag.game.scene.entity.RSNpc;
 
 import java.util.Collection;
 import java.util.List;
@@ -49,6 +51,12 @@ public class NpcQuery extends PathingEntityQuery<RSNpc, Npc, NpcQuery> implement
     public NpcQuery ids(int... ids) {
         this.ids = ids;
         return self();
+    }
+
+    @Override
+    public NpcQuery indexes(int... indexes) {
+        indexProvider(Game.getClient().getNpcs(), Npc::new);
+        return super.indexes(indexes);
     }
 
     @Override
